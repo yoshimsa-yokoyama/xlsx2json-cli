@@ -1,6 +1,6 @@
 {
   "name": "@asamihsoy/xlsx2json",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Excel file to JSON file converter",
   "repository": {
     "type": "git",

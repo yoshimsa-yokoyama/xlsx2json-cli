@@ -1,19 +1,19 @@
-# @asamihsoy/xlsx2json-cli
+# @asamihsoy/xlsx2json
 
 ※ will be translated into English in near future
 
 ## インストール・起動方法
 
 ``` bash
-npm i -D @asamihsoy/xlsx2json-cli
-npx xlsx2json-cli ./sample.xlsx
+npm i -D @asamihsoy/xlsx2json
+npx xlsx2json ./sample.xlsx
 ```
 
-※ npm scriptには `xlsx2json-cli ./sample.xlsx -o ./assets/src/` という形で指定できます。
+※ npm scriptには `xlsx2json ./sample.xlsx -o ./assets/src/` という形で指定できます。
 
 ## 基本の使い方
 
-xlsxファイルを用意して `xlsx2json-cli` を実行することで、JSONへ変換できます。
+xlsxファイルを用意して `xlsx2json` を実行することで、JSONへ変換できます。
 
 ##### 【INPUT】ファイル名: rostar.xlsx / シート名: member
 
@@ -25,7 +25,7 @@ xlsxファイルを用意して `xlsx2json-cli` を実行することで、JSON�
 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 ```
-npx xlsx2json-cli ./member.xlsx
+npx xlsx2json ./member.xlsx
 ```
 
 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -52,7 +52,7 @@ npx xlsx2json-cli ./member.xlsx
 ## コマンドライン使用時のオプション確認
 
 ```
-npx xlsx2json-cli -h
+npx xlsx2json -h
 ```
 
 |フラグ|備考                                          |
