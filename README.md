@@ -1,9 +1,11 @@
-# @yoshimsa-yokoyama/xlsx2json-cli
+# @asamihsoy/xlsx2json-cli
+
+※ will be translated into English in near future
 
 ## インストール・起動方法
 
 ``` bash
-npm i -D @yoshimsa-yokoyama/xlsx2json-cli
+npm i -D @asamihsoy/xlsx2json-cli
 npx xlsx2json-cli ./sample.xlsx
 ```
 
@@ -17,7 +19,7 @@ xlsxファイルを用意して `xlsx2json-cli` を実行することで、JSON�
 
 |id|name              |company          |department|
 |--|------------------|-----------------|----------|
-|1 |@yoshimsa-yokoyama|fugafuga Inc     |division1 |
+|1 |@asamihsoy|fugafuga Inc     |division1 |
 |2 |@person2          |hogehoge Inc     |division2 |
 
 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -33,7 +35,7 @@ npx xlsx2json-cli ./member.xlsx
 {
 "data": [{
     "id": 1,
-    "name": "@yoshimsa-yokoyama",
+    "name": "@asamihsoy",
     "company": "fugafuga Inc",
     "department": "division1"
   },{

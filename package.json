@@ -1,10 +1,10 @@
 {
-  "name": "@yoshimsa-yokoyama/xlsx2json",
+  "name": "@asamihsoy/xlsx2json",
   "version": "0.1.0",
-  "description": "Excel file to JSON file converter with programmable key features",
+  "description": "Excel file to JSON file converter",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:yoshimsa-yokoyama/xlsx2json-cli.git"
   },
   "bin": {
     "xlsx2json": "./xlsx2json-cli.js"
@@ -13,9 +13,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "xlsx2json"
+    "xlsx2json",
+    "cli"
   ],
-  "author": "Yoshimasa Yokoyama <yoshi1026.work@gmail.com>",
+  "author": "yoshimsa-yokoyama",
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.0",
