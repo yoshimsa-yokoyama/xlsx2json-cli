@@ -241,7 +241,7 @@ const importReference = (originKey, singleRecord, referringSheetName) => {
 
       // valueから不可視キー（__*)を削除
       Object.keys(tmpCur).forEach(key => {
-        if (/^(__)[A-Za-z0-9_]*$/.test(key)) {
+        if (/^(__).*$/.test(key)) {
           delete tmpCur[key];
         }
       });
@@ -395,7 +395,7 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
   // キャッシュした完成データをファイルに出力
   tgts.forEach(tgt => {
     // __*と!*のシートは出力はしない
-    if (!/^(__)[A-Za-z0-9_]*$|^\![A-Za-z0-9_]*/.test(tgt)) {
+    if (!/^(__).*$|^\!.*/.test(tgt)) {
 
       const topLvOption = tgt.match(new RegExp(`\\${TOP_LV_OPT_DELIMITER}`,'g'));
       const topLvOptionCount = topLvOption !== null ? topLvOption.length : 0;
