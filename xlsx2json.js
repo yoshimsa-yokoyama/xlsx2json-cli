@@ -277,7 +277,7 @@ const importReference = (originKey, singleRecord, referringSheetName) => {
  * ワークシートのメイン処理
  *
  **********************************************************/
-const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
+const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./'), type = 'array') => {
   let workbook;
 
   console.log(`${chalk.white.bgBlue.bold(`output directory: ${outdir}`)}`);
@@ -413,6 +413,10 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
       const topLvOption = tgt.match(new RegExp(`\\${TOP_LV_OPT_DELIMITER}`,'g'));
       const topLvOptionCount = topLvOption !== null ? topLvOption.length : 0;
 
+      // セーブするデータ
+      let fileName = tgt
+      let dataToSave = jsonCache[tgt]
+
       if (topLvOptionCount > 0) {
         // シートにオプションが付いていた場合
         const trimedTgt = tgt.substr(0, tgt.indexOf(TOP_LV_OPT_DELIMITER));
@@ -426,25 +430,46 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
 
           Object.keys(jsonCache[tgt]).forEach(itm => {
             if (itm === 'data') {
-              tmpObj[topLvOptions.key] = jsonCache[tgt].data;
+              // type オプションによって出力形式変更
+              switch (type) {
+                case 'object':
+                  // 出力をobject形式に置き換えてマージ
+                  if (jsonCache[tgt].data.length === 1) {
+                    // dataが単体のとき
+                    tmpObj[topLvOptions.key] = merge(jsonCache[tgt].data[0], jsonCache[tgt][topLvOptions.key]);
+                  } else {
+                    // dataの中身が複数ある場合はindexをキーにする
+                    tmpObj[topLvOptions.key] = merge(
+                      jsonCache[tgt][topLvOptions.key],
+                      Object.fromEntries(jsonCache[tgt].data.map((itm,idx) => {
+                        return [ idx, itm ]
+                      }))
+                    );
+                  }
+                  break
+                case 'array':
+                  tmpObj[topLvOptions.key] = jsonCache[tgt].data;
+                  break
+                default:
+                  tmpObj[topLvOptions.key] = jsonCache[tgt].data;
+              }
             } else {
               tmpObj[itm] = jsonCache[tgt][itm];
             }
           });
 
-          fs.writeFile(
-            `${outdir}/${FILENAME_PREFIX}${trimedTgt}.json`,
-            JSON.stringify(tmpObj, undefined, space),
-            cb
-          );
+          // データを上書き
+          fileName = trimedTgt
+          dataToSave = tmpObj
         }
-      } else {
-        fs.writeFile(
-          `${outdir}/${FILENAME_PREFIX}${tgt}.json`,
-          JSON.stringify(jsonCache[tgt], undefined, space),
-          cb
-        );
       }
+
+      // データを保存
+      fs.writeFile(
+        `${outdir}/${FILENAME_PREFIX}${fileName}.json`,
+        JSON.stringify(dataToSave, undefined, space),
+        cb
+      );
     }
   });
 
@@ -466,6 +491,7 @@ const init = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
     .option('-o, --outdir <outdir>', 'JSON output directory')
+    .option('-t, --type <type>', 'Top level data type can be "object" or "array"')
     .parse(process.argv);
 
   // コマンド名の表示
@@ -489,7 +515,7 @@ const init = () => {
         if (options.outdir !== undefined) console.log(`${chalk.white.bgBlue.bold(`output dir: ${options.outdir}`)}`);
 
         // 実行
-        xlsx2Json(xlsxFilePath, options.outdir);
+        xlsx2Json(xlsxFilePath, options.outdir, options.type);
       }
     } catch(err) {
       console.error(err)
