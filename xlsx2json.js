@@ -321,12 +321,12 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
         console.log('hierarchy >>> ', hasHierarchy);
         console.log('reference >>> ', hasReference);
 
-        if (hasHierarchy) {
-          // 階層構造を持っていた場合
-          record = createHierarchy(key, record);
-        } else if (hasReference) {
+        if (hasReference) {
           // 参照を持っていた場合
           record = importReference(key, record, tgt);
+        } else if (hasHierarchy) {
+          // 階層構造を持っていた場合
+          record = createHierarchy(key, record);
         }
       });
 
@@ -375,6 +375,17 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
     })
   }
 
+  // データが完成した段階で再度階層構造を分解
+  tgts.forEach((tgt) => {
+    jsonCache[tgt].data.forEach((itm,idx) => {
+      Object.keys(itm).forEach(key => {
+        if (key.includes(HIERARCHY_DELIMITER)) {
+          createHierarchy(key, jsonCache[tgt].data[idx])
+        }
+      })
+    })
+  })
+
   // オーバーライド用シートがあったらマージ
   if (overrideSheetKeys.length > 0) {
     overrideSheetKeys.forEach(key => {
@@ -385,7 +396,9 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./')) => {
       // オーバーライド用シート名から結合するシートのキーを取得
       // NOTE: オプションが付いているシート名は単純にオーバーライド用
       //       シート名をキーとして参照できないため
-      const tgtKey = tgts.find(tgt => new RegExp(`^${key.substr(1)}\\$`).test(tgt));
+      const tgtKey = tgts.find(tgt => {
+        return new RegExp(`^${key.substr(1)}(\\$[A-Za-z0-9|_]+=[A-Za-z0-9|_]+)?$`).test(tgt)
+      });
 
       // オーバーライド用シートのデータにオーバーライド先のシートのデータをマージ
       jsonCache[tgtKey] = merge(jsonCache[key].data[0], jsonCache[tgtKey]);
