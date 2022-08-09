@@ -473,7 +473,6 @@ const xlsx2Json = (xlsxFilePath, outdir = path.resolve('./'), type = 'array') =>
     }
   });
 
-  console.log('cached: ', jsonCache);
 
   console.log('')
   console.log('======================================');
