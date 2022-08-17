@@ -502,7 +502,8 @@ const init = () => {
     /^(\.\/)?[^\.]+\.(xlsx)$/.test(program.args[0])
   ) {
     const rootDir = path.resolve('./');
-    const xlsxFilePath = `${rootDir}/${program.args[0]}`;
+    // program.args[0]が/で始まっている場合はそのまま使用
+    const xlsxFilePath = /^\/.*$/.test(program.args[0]) ? `${program.args[0]}` : `${rootDir}/${program.args[0]}`;
 
     // ファイルの存在を確認
     try {
